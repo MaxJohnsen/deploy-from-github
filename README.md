@@ -8,6 +8,6 @@ Deployment scripts for the following frameworks and platforms are currently prov
 
 - .Net Core
   - Windows (IIS Server)
-  - CentOS
+  - Linux
   
 To run the bash scripts on Windows, you need a bash emulator (Git Bash or similar).
