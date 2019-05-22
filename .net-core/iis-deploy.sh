@@ -3,6 +3,8 @@ SITE_NAME="example.site.com"
 APP_POOL="example.pool"
 SOURCE_CODE="/c/src/example.site.com"
 PUBLISH_OUTPUT="c:\www\example.site.com"
+AUTOMATIC_MIGRATIONS=true
+ASPNETCORE_ENVIRONMENT="Production"
 
 cd "${SOURCE_CODE}"
 git checkout ${BRANCH}
@@ -26,7 +28,13 @@ then
 	echo -e Stopp AppPool: ${APP_POOL}
 	appcmd stop apppool /apppool.name:"${APPP_OOL}"
 	echo -e Publish new version to ${PUBLISH_OUTPUT}..
+	export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
 	dotnet publish -c Release -o "${PUBLISH_OUTPUT}"
+	if [ $AUTOMATIC_MIGRATIONS ]
+	then
+		echo -e Check for new database migrations..
+		dotnet ef database update
+	fi
 	echo -e Start AppPool: ${APP_POOL}
 	appcmd start apppool /apppool.name:"${APP_POOL}"
 	echo -e Start website: ${SITE_NAME}..
