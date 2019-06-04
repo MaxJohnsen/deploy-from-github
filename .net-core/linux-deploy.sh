@@ -27,12 +27,12 @@ then
 	echo -e Stopp service ${SERVICE_NAME}..
 	systemctl stop ${SERVICE_NAME}
 	echo -e Publish new version to ${PUBLISH_OUTPUT}..
-	sudo -u ${SERVICE_USER} export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-	sudo -u ${SERVICE_USER} ${DOTNET_DIR}/dotnet publish -c Release -o "${PUBLISH_OUTPUT}"
+	export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+	sudo -u ${SERVICE_USER} -E ${DOTNET_DIR}/dotnet publish -c Release -o "${PUBLISH_OUTPUT}"
 	if [ $AUTOMATIC_MIGRATIONS ]
 	then
 		echo -e Check for new database migrations..
-		sudo -u ${SERVICE_USER} ${DOTNET_DIR}/dotnet ef database update
+		sudo -u ${SERVICE_USER} -E ${DOTNET_DIR}/dotnet ef database update
 	fi
 	echo -e Start service ${SERVICE_NAME}..
 	systemctl start ${SERVICE_NAME}
